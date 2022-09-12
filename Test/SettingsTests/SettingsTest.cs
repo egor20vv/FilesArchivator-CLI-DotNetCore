@@ -48,7 +48,6 @@ public  class SettingsTest
     }
 
     [Theory]
-    [InlineData(new[] {"path"}, "dest", "name", null)]
     [InlineData(new[] {"path"}, "dest", null, new[] {LogOption.None})]
     [InlineData(new[] { "path" }, null, "name", new[] { LogOption.None })]
     [InlineData(null, "dest", "name", new[] { LogOption.None })]
@@ -128,7 +127,6 @@ public  class SettingsTest
     }
 
     [Theory]
-    [InlineData(new[] { "path" }, "dest", "name", null)]
     [InlineData(new[] { "path" }, "dest", null, new[] { LogOption.None })]
     [InlineData(new[] { "path" }, null, "name", new[] { LogOption.None })]
     [InlineData(null, "dest", "name", new[] { LogOption.None })]

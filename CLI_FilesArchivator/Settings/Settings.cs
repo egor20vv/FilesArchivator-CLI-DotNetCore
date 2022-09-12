@@ -26,14 +26,7 @@ public partial class Settings: IAsyncDisposable
         if (!File.Exists(settingsFileFullName))
             throw new FileNotFoundException("Settings file is not found", settingsFileFullName);
 
-        try
-        {
-            _File = File.Open(settingsFileFullName, FileMode.Open, FileAccess.ReadWrite);
-        } 
-        catch (Exception e)
-        {
-            throw new IOException("Settings file can't be opened", e);
-        }
+        _File = File.Open(settingsFileFullName, FileMode.Open, FileAccess.ReadWrite);
     }
 
     public async Task<SettingsData> ReadSettingsFileAsync()
