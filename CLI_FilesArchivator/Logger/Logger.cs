@@ -36,9 +36,13 @@ public class Logger : IAsyncDisposable
 
     public async Task<Logger> ConfigureLogFile(IEnumerable<LogOption>? options)
     {
-        var fullLogFilePath = Path.Combine("Logs", string.Format("log_{0}.txt", DateTime.Now.ToString("yyyyMMddHHmmss")));
+        if (options == null || !options.Any() || options.First() == LogOption.None)
+            return this;
 
-        if (Directory.Exists("Logs"))
+        var fullLogFilePath = Path.Combine("Logs", string.Format("log_{0}.txt", DateTime.Now.ToString("yyyyMMddHHmmss")));
+        
+        // create if logs directory is not exists
+        if (!Directory.Exists("Logs"))
             Directory.CreateDirectory("Logs");
 
         // clear if existed file
@@ -46,6 +50,7 @@ public class Logger : IAsyncDisposable
         // new stream writer
         var logFile = new StreamWriter(File.Open(fullLogFilePath, FileMode.OpenOrCreate, FileAccess.Write));
         return await ConfigureLogFile(options, logFile);
+
     }
 
     public async Task<Logger> ConfigureLogFile(IEnumerable<LogOption>? options, StreamWriter logStream)

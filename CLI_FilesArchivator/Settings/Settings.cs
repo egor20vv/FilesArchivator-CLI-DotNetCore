@@ -12,33 +12,43 @@ namespace CLI_FilesArchivator.Settings;
 
 public partial class Settings: IAsyncDisposable
 {
-    #region Properties
-
     public Stream _File { get; set; }
 
-    #endregion
-
+    public Settings() { }
     public Settings(Stream settingsFile)
     {
         _File = settingsFile;
     }
 
-
     public async Task<SettingsData> ReadSettingsFileAsync()
     {
+        if (_File == null || !_File.CanSeek || !_File.CanRead)
+            throw new IOException("_File is invalid");
+
         var streamReader = new StreamReader(_File);
         var readedSettingsData = await streamReader.ReadToEndAsync();
         _File.Seek(0, SeekOrigin.Begin);
 
-        var settingsData = JsonConvert.DeserializeObject<SettingsData>(readedSettingsData);
-        if (settingsData == null)
-            throw new JsonSerializationException("Settings file is empty");
+        try
+        {
+            var settingsData = JsonConvert.DeserializeObject<SettingsData>(readedSettingsData);
+            if (settingsData == null)
+                throw new JsonSerializationException("Settings file is empty");
+
+            return settingsData;
+        }
+        catch(Exception e)
+        {
+            throw new JsonSerializationException(e.Message);
+        }
         
-        return settingsData;
     }
 
     public async Task WriteSettingsFileAsync(SettingsData settingsData)
     {
+        if (_File == null || !_File.CanSeek || !_File.CanWrite)
+            throw new IOException("_File is invalid");
+
         var settingsDataString = JsonConvert.SerializeObject(settingsData, Formatting.Indented);
 
         var writer = new StreamWriter(_File);
@@ -57,11 +67,4 @@ public partial class Settings: IAsyncDisposable
     }
 
     #endregion
-}
-
-
-// tests
-public partial class Settings
-{
-    public Settings() { }
 }

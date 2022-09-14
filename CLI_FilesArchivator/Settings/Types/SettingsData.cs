@@ -13,7 +13,7 @@ public class SettingsData
     [JsonProperty(Required = Required.Always)]
     public string ZipFileName { get; set; }
 
-    [JsonProperty(Required = Required.AllowNull)]
+    // [JsonProperty(Required = Required.AllowNull)]
     public IEnumerable<LogOption>? LogOptions { get; set; }
 
 
