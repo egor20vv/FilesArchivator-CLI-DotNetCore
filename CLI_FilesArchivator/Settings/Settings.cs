@@ -18,16 +18,11 @@ public partial class Settings: IAsyncDisposable
 
     #endregion
 
-    public Settings(string settingsFileFullName)
+    public Settings(Stream settingsFile)
     {
-        if (settingsFileFullName == null)
-            throw new ArgumentNullException(nameof(settingsFileFullName));
-
-        if (!File.Exists(settingsFileFullName))
-            throw new FileNotFoundException("Settings file is not found", settingsFileFullName);
-
-        _File = File.Open(settingsFileFullName, FileMode.Open, FileAccess.ReadWrite);
+        _File = settingsFile;
     }
+
 
     public async Task<SettingsData> ReadSettingsFileAsync()
     {
